@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
 import { signUp } from '../../api/auth';
 import { TextField, Button, Container, Typography, Box, AppBar, Toolbar } from '@mui/material';
 
-const SignUp: React.FC = () => {
+const RegisterPage: React.FC = () => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -19,8 +20,8 @@ const SignUp: React.FC = () => {
         }
         try {
             await signUp(name, email, password, password2);
-            navigate('/signin'); // Redirect to sign-in page on success
-        } catch (err: any) {
+            navigate('/login');
+        } catch (err) {
             setError('Failed to sign up. Please try again.');
         }
     };
@@ -99,10 +100,18 @@ const SignUp: React.FC = () => {
                 >
                     Sign Up
                 </Button>
+                <Button
+                    component={RouterLink}
+                    to="/login"
+                    variant="text"
+                    style={{ textDecoration: 'none' }}
+                >
+                    I already have an account
+                </Button>
             </Box>
         </Container>
         </>
     );
 };
 
-export default SignUp;
+export default RegisterPage;

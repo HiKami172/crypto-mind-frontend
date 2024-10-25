@@ -1,22 +1,33 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { signIn } from '../../api/auth';
-import { TextField, Button, Checkbox, FormControlLabel, Container, Typography, Box, AppBar, Toolbar } from '@mui/material';
+import { Link as RouterLink } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
+import {
+    TextField,
+    Button,
+    Checkbox,
+    FormControlLabel,
+    Container,
+    Typography,
+    Box,
+    AppBar,
+    Toolbar
+} from '@mui/material';
 
-const SignIn: React.FC = () => {
+const LoginPage: React.FC = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [keepLoggedIn, setKeepLoggedIn] = useState(false);
     const [error, setError] = useState('');
+    const { login } = useAuth();
     const navigate = useNavigate();
 
     const handleSignIn = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            await signIn(email, password, keepLoggedIn);
-            navigate('/home'); // Redirect to home page on success
+            await login(email, password, keepLoggedIn, navigate);
         } catch (err: any) {
-            setError('Failed to sign in. Please check your credentials.');
+            setError(`Failed to login.`);
         }
     };
 
@@ -83,10 +94,18 @@ const SignIn: React.FC = () => {
                     >
                         Sign In
                     </Button>
+                    <Button
+                        component={RouterLink}
+                        to="/register"
+                        variant="text"
+                        style={{ textDecoration: 'none' }}
+                    >
+                        I don’t have an account
+                    </Button>
                 </Box>
             </Container>
         </>
     );
 };
 
-export default SignIn;
+export default LoginPage;
