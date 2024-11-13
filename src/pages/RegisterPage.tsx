@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Link as RouterLink } from 'react-router-dom';
-import { signUp } from '../../api/auth';
+import { signUp } from '../api/auth';
 import { TextField, Button, Container, Typography, Box, AppBar, Toolbar } from '@mui/material';
 
 const RegisterPage: React.FC = () => {

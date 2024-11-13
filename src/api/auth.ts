@@ -4,7 +4,7 @@ const API_URL = 'http://localhost:8000'; // Adjust to your FastAPI base URL
 
 export const signIn = async (email: string, password: string, keepLoggedIn: boolean) => {
     try {
-        const response = await axios.post(`${API_URL}/login/`, {
+        const response = await axios.post(`${API_URL}/signin/`, {
             email,
             password,
             keep_logged_in: keepLoggedIn,
@@ -17,7 +17,7 @@ export const signIn = async (email: string, password: string, keepLoggedIn: bool
 
 export const signUp = async (name: string, email: string, password: string, password2: string) => {
     try {
-        const response = await axios.post(`${API_URL}/users/`, {
+        const response = await axios.post(`${API_URL}/signup/`, {
             name,
             email,
             password,

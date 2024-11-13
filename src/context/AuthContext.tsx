@@ -10,21 +10,28 @@ interface AuthContextProps {
 const AuthContext = createContext<AuthContextProps | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    // Initialize isAuthenticated based on whether there is a token in localStorage
+    const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => !!localStorage.getItem('token'));
 
     useEffect(() => {
-        const token = localStorage.getItem('accessToken');
-        setIsAuthenticated(!!token);
+        // Re-check token on mount in case it changed
+        const token = localStorage.getItem('token');
+        if (token) {
+            setIsAuthenticated(true);
+        }
     }, []);
 
     const login = async (email: string, password: string, keepLoggedIn: boolean, navigate: (path: string) => void) => {
-        await signIn(email, password, keepLoggedIn);
+        const loginResult = await signIn(email, password, keepLoggedIn);
+        console.log(loginResult);
+        console.log("access_token ==> ", loginResult.token.access_token.token);
+        localStorage.setItem('token', loginResult.token.access_token.token);
         setIsAuthenticated(true);
         navigate('/home');
     };
 
     const logout = (navigate: (path: string) => void) => {
-        localStorage.removeItem('accessToken');
+        localStorage.removeItem('token');
         setIsAuthenticated(false);
         navigate('/login');
     };
