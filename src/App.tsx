@@ -1,8 +1,8 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import LoginPage from './pages/LoginPage';
-import RegisterPage from './pages/RegisterPage';
-import DashboardPage from './pages/DashboardPage';
+import Dashboard from './pages/Dashboard';
+import SignIn from './pages/SignIn'
+import SignUp from './pages/SignUp'
 import { CssBaseline } from '@mui/material';
 import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -16,13 +16,13 @@ const App: React.FC = () => {
                 <Router>
                     <CssBaseline />
                     <Routes>
-                        <Route path="/login" element={<LoginPage />} />
-                        <Route path="/register" element={<RegisterPage />} />
+                        <Route path="/sign-in" element={<SignIn />} />
+                        <Route path="/sign-up" element={<SignUp />} />
                         <Route
-                            path="/home"
+                            path="/dashboard"
                             element={
                                 <ProtectedRoute>
-                                    <DashboardPage />
+                                    <Dashboard />
                                 </ProtectedRoute>
                             }
                         />
@@ -30,7 +30,7 @@ const App: React.FC = () => {
                             path="/"
                             element={
                                 <ProtectedRoute>
-                                    <DashboardPage />
+                                    <Dashboard />
                                 </ProtectedRoute>
                             }
                         />
