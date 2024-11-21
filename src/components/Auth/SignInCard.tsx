@@ -14,14 +14,19 @@ import Typography from '@mui/material/Typography';
 import Card from './Card';
 import ForgotPassword from './ForgotPassword';
 import { GoogleIcon } from './CustomIcons';
-import {useAuth} from "../../context/AuthContext";
+import { AuthContext } from '../../context/AuthContext';
 import {useNavigate} from "react-router-dom";
+import {useContext} from "react";
 
 
 
 export default function SignInCard() {
-  const navigate = useNavigate();
-  const { login } = useAuth();
+  const authContext = useContext(AuthContext);
+  if (!authContext) {
+    throw new Error('AuthContext must be used within an AuthProvider');
+  }
+
+  const { login } = authContext;
 
   const [emailError, setEmailError] = React.useState(false);
   const [emailErrorMessage, setEmailErrorMessage] = React.useState('');
@@ -49,7 +54,7 @@ export default function SignInCard() {
     const password = data.get('password') as string;
 
     try {
-      await login(email, password, rememberMe, navigate);
+      await login(email, password, rememberMe);
     } catch (error) {
       console.error("Login failed:", error);
       setEmailError(true);
