@@ -9,9 +9,8 @@ import Typography from '@mui/material/Typography';
 import SelectContent from './SelectContent';
 import MenuContent from './MenuContent';
 import OptionsMenu from './OptionsMenu';
-import { useDispatch, useSelector } from "react-redux";
-import { fetchUserInfo, selectUser } from "../../store/userSlice";
-import { useEffect } from "react";
+import { useSelector } from "react-redux";
+import { selectUser } from "../../store/userSlice";
 import Link from "@mui/material/Link";
 
 const drawerWidth = 240;
@@ -29,13 +28,7 @@ const Drawer = styled(MuiDrawer)({
 });
 
 export default function SideMenu() {
-    const dispatch = useDispatch();
     const user = useSelector(selectUser);
-
-    useEffect(() => {
-        // @ts-ignore
-        dispatch(fetchUserInfo());
-    }, [dispatch]);
 
     return (
         <Drawer
