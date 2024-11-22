@@ -10,16 +10,21 @@ import ListItemIcon, { listItemIconClasses } from '@mui/material/ListItemIcon';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 import MoreVertRoundedIcon from '@mui/icons-material/MoreVertRounded';
 import MenuButton from './MenuButton';
-import {useAuth} from "../../context/AuthContext";
-import {useNavigate} from "react-router-dom";
+import {AuthContext} from "../../context/AuthContext";
+import {useContext} from "react";
 
 const MenuItem = styled(MuiMenuItem)({
   margin: '2px 0',
 });
 
 export default function OptionsMenu() {
-    const {logout} = useAuth();
-    const navigate = useNavigate()
+    const authContext = useContext(AuthContext);
+
+    if (!authContext) {
+        throw new Error('AuthContext must be used within an AuthProvider');
+    }
+    const { logout } = authContext;
+
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
     const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -29,7 +34,7 @@ export default function OptionsMenu() {
     setAnchorEl(null);
     };
 
-    const handleLogout = () =>  { logout(navigate); console.log('lol'); }
+    const handleLogout = () =>  { logout(); }
 
     return (
     <React.Fragment>

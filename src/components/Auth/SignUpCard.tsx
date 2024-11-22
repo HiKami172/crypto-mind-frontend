@@ -10,15 +10,19 @@ import Link from '@mui/material/Link';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
-import { useAuth } from '../../context/AuthContext';
+import { AuthContext } from '../../context/AuthContext';
 
 import Card from './Card';
 import { GoogleIcon } from './CustomIcons';
-import {useNavigate} from "react-router-dom";
+import {useContext} from "react";
 
 export default function SignUpCard(props: { disableCustomTheme?: boolean }) {
-    const navigate = useNavigate();
-    const { register } = useAuth();
+    const authContext = useContext(AuthContext);
+    if (!authContext) {
+        throw new Error('AuthContext must be used within an AuthProvider');
+    }
+    const { register } = authContext;
+
 
     const [emailError, setEmailError] = React.useState(false);
     const [emailErrorMessage, setEmailErrorMessage] = React.useState('');
@@ -77,7 +81,7 @@ export default function SignUpCard(props: { disableCustomTheme?: boolean }) {
         const password = data.get('password') as string;
 
         try {
-            await register(name, email, password, navigate);
+            await register(name, email, password);
         } catch (error) {
             console.error("Registration failed:", error);
             setEmailError(true);
