@@ -1,58 +1,109 @@
-import { signIn, signUp } from '../api/auth';
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useState, useEffect, useCallback } from 'react';
+import API from '../api/axiosInstance';
+import qs from 'qs';
+import { useNavigate } from 'react-router-dom';
 
-interface AuthContextProps {
+interface AuthContextType {
     isAuthenticated: boolean;
-    login: (email: string, password: string, keepLoggedIn: boolean, navigate: (path: string) => void) => Promise<void>;
-    register: (name: string, email: string, password: string, navigate: (path: string) => void) => Promise<void>;
-    logout: (navigate: (path: string) => void) => void;
+    token: string | null;
+    register: (fullname: string, email: string, password: string) => Promise<void>;
+    login: (email: string, password: string, keepLoggedIn: boolean) => Promise<void>;
+    googleLogin: () => Promise<void>;
+    setAuthState: (newToken: string | null) => void;
+    logout: () => void;
 }
 
-const AuthContext = createContext<AuthContextProps | undefined>(undefined);
+export const AuthContext = createContext<AuthContextType | null>(null);
 
-export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => !!localStorage.getItem('token'));
+export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+    const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem('token'));
+    const [token, setToken] = useState<string | null>(localStorage.getItem('token'));
+    const navigate = useNavigate();
+
+    const setAuthState = (newToken: string | null) => {
+        if (newToken) {
+            setToken(newToken);
+            setIsAuthenticated(true);
+            localStorage.setItem('token', newToken);
+        } else {
+            setToken(null);
+            setIsAuthenticated(false);
+            localStorage.removeItem('token');
+        }
+    };
+
+    const register = async (fullname: string, email: string, password: string) => {
+        const response = await API.post(`/auth/register/`, {
+            full_name: fullname,
+            email,
+            password,
+        });
+        setAuthState(response.data.access_token);
+        navigate('/dashboard');
+    };
+
+    const login = async (email: string, password: string, keepLoggedIn: boolean) => {
+        try {
+            const requestData = { username: email, password: password };
+
+            const response = await API.post(
+                `/auth/login/`,
+                qs.stringify(requestData), // serialize the data
+                {
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                }
+            );
+            console.log(response.request);
+            setAuthState(response.data.access_token);
+            navigate('/dashboard');
+        } catch (error) {
+            console.error('Login failed:', error);
+            throw error;
+        }
+    };
+
+    const googleLogin = async () => {
+        const response = await API.get('/auth/google/authorize');
+        window.location.href = response.data.authorization_url;
+    };
+
+
+    const logout = useCallback(async () => {
+        try {
+            await API.get(`/auth/logout/`, { withCredentials: true });
+        } catch (error) {
+            console.error('Logout failed:', error);
+        } finally {
+            setAuthState(null);
+            navigate('/sign-in');
+        }
+    }, [navigate]);
+
+    const refreshToken = useCallback(async () => {
+        try {
+            const response = await API.post(`/refresh/`, {}, { withCredentials: true });
+            setAuthState(response.data.access_token);
+        } catch (error) {
+            console.error('Token refresh failed:', error);
+            logout();
+        }
+    }, [logout]);
 
     useEffect(() => {
-        const token = localStorage.getItem('token');
-        if (token) {
-            setIsAuthenticated(true);
-        }
-    }, []);
+        if (!token) return;
 
-    const login = async (email: string, password: string, keepLoggedIn: boolean, navigate: (path: string) => void) => {
-        const loginResult = await signIn(email, password, keepLoggedIn);
-        console.log(loginResult);
-        console.log("access_token ==> ", loginResult.token.access_token.token);
-        localStorage.setItem('token', loginResult.token.access_token.token);
-        setIsAuthenticated(true);
-        navigate('/dashboard');
-    };
+        const interval = setInterval(() => {
+            refreshToken();
+        }, 14 * 60 * 1000); // Refresh token every 14 minutes
 
-    const register = async (name: string, email: string, password: string, navigate: (parht: string) => void) => {
-        const registerResult = await signUp(name, email, password)
-        localStorage.setItem('token', registerResult.token.access_token.token);
-        setIsAuthenticated(true);
-        navigate('/dashboard');
-    };
-
-    const logout = (navigate: (path: string) => void) => {
-        localStorage.removeItem('token');
-        setIsAuthenticated(false);
-        navigate('/sign-in');
-    };
+        return () => clearInterval(interval);
+    }, [token, refreshToken]);
 
     return (
-        <AuthContext.Provider value={{ isAuthenticated, login, logout, register }}>
+        <AuthContext.Provider value={{ isAuthenticated, token, register, login, googleLogin, setAuthState, logout }}>
             {children}
         </AuthContext.Provider>
     );
-};
-
-export const useAuth = () => {
-    const context = useContext(AuthContext);
-    if (!context) {
-        throw new Error('useAuth must be used within an AuthProvider');
-    }
-    return context;
 };

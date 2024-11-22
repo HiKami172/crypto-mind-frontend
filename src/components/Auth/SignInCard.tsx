@@ -1,34 +1,38 @@
-import * as React from 'react';
+import {useState, useContext, FormEvent} from "react";
+
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import Checkbox from '@mui/material/Checkbox';
 import Divider from '@mui/material/Divider';
 import FormLabel from '@mui/material/FormLabel';
 import FormControl from '@mui/material/FormControl';
-import FormControlLabel from '@mui/material/FormControlLabel';
 import Link from '@mui/material/Link';
-import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
+import Checkbox from '@mui/material/Checkbox';
+import TextField from '@mui/material/TextField';
+import FormControlLabel from '@mui/material/FormControlLabel';
 
 
 import Card from './Card';
 import ForgotPassword from './ForgotPassword';
 import { GoogleIcon } from './CustomIcons';
-import {useAuth} from "../../context/AuthContext";
-import {useNavigate} from "react-router-dom";
+import { AuthContext } from '../../context/AuthContext';
 
 
 
 export default function SignInCard() {
-  const navigate = useNavigate();
-  const { login } = useAuth();
+  const authContext = useContext(AuthContext);
+  if (!authContext) {
+    throw new Error('AuthContext must be used within an AuthProvider');
+  }
 
-  const [emailError, setEmailError] = React.useState(false);
-  const [emailErrorMessage, setEmailErrorMessage] = React.useState('');
-  const [passwordError, setPasswordError] = React.useState(false);
-  const [passwordErrorMessage, setPasswordErrorMessage] = React.useState('');
-  const [rememberMe, setRememberMe] = React.useState(false);
-  const [open, setOpen] = React.useState(false);
+  const { login, googleLogin } = authContext;
+
+  const [emailError, setEmailError] = useState(false);
+  const [emailErrorMessage, setEmailErrorMessage] = useState('');
+  const [passwordError, setPasswordError] = useState(false);
+  const [passwordErrorMessage, setPasswordErrorMessage] = useState('');
+  const [rememberMe, setRememberMe] = useState(false);
+  const [open, setOpen] = useState(false);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -38,7 +42,7 @@ export default function SignInCard() {
     setOpen(false);
   };
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     const isValid = validateInputs();
@@ -49,7 +53,7 @@ export default function SignInCard() {
     const password = data.get('password') as string;
 
     try {
-      await login(email, password, rememberMe, navigate);
+      await login(email, password, rememberMe);
     } catch (error) {
       console.error("Login failed:", error);
       setEmailError(true);
@@ -172,7 +176,7 @@ export default function SignInCard() {
         <Button
           fullWidth
           variant="outlined"
-          onClick={() => alert('Sign in with Google')}
+          onClick={() => googleLogin()}
           startIcon={<GoogleIcon />}
         >
           Sign in with Google
