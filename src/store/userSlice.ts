@@ -17,7 +17,7 @@ const initialState: UserState = {
 };
 
 export const fetchUserInfo = createAsyncThunk('user/fetchUserInfo', async () => {
-    const response = await apiClient.get('/me/');  // Update with actual endpoint base URL if necessary
+    const response = await apiClient.get('users/me/');  // Update with actual endpoint base URL if necessary
     return response.data;
 });
 
@@ -33,7 +33,7 @@ const userSlice = createSlice({
             .addCase(fetchUserInfo.fulfilled, (state, action) => {
                 state.status = 'succeeded';
                 state.id = action.payload.id;
-                state.name = action.payload.name;
+                state.name = action.payload.full_name;
                 state.email = action.payload.email;
             })
             .addCase(fetchUserInfo.rejected, (state) => {

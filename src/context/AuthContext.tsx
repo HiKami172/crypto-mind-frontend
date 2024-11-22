@@ -1,5 +1,6 @@
 import React, { createContext, useState, useEffect, useCallback } from 'react';
 import API from '../api/axiosInstance';
+import qs from 'qs';
 import { useNavigate } from 'react-router-dom';
 
 interface AuthContextType {
@@ -7,6 +8,8 @@ interface AuthContextType {
     token: string | null;
     register: (fullname: string, email: string, password: string) => Promise<void>;
     login: (email: string, password: string, keepLoggedIn: boolean) => Promise<void>;
+    googleLogin: () => Promise<void>;
+    setAuthState: (newToken: string | null) => void;
     logout: () => void;
 }
 
@@ -30,21 +33,27 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     };
 
     const register = async (fullname: string, email: string, password: string) => {
-        const response = await API.post(`/signup/`, {
-            name: fullname,
+        const response = await API.post(`/auth/register/`, {
+            full_name: fullname,
             email,
             password,
-            password2: password,
         });
         setAuthState(response.data.access_token);
+        navigate('/dashboard');
     };
 
     const login = async (email: string, password: string, keepLoggedIn: boolean) => {
         try {
+            const requestData = { username: email, password: password };
+
             const response = await API.post(
-                `/signin/`,
-                { email, password, keep_logged_in: keepLoggedIn },
-                { withCredentials: true }
+                `/auth/login/`,
+                qs.stringify(requestData), // serialize the data
+                {
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                }
             );
             console.log(response.request);
             setAuthState(response.data.access_token);
@@ -55,9 +64,15 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         }
     };
 
+    const googleLogin = async () => {
+        const response = await API.get('/auth/google/authorize');
+        window.location.href = response.data.authorization_url;
+    };
+
+
     const logout = useCallback(async () => {
         try {
-            await API.get(`/signout/`, { withCredentials: true });
+            await API.get(`/auth/logout/`, { withCredentials: true });
         } catch (error) {
             console.error('Logout failed:', error);
         } finally {
@@ -87,7 +102,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }, [token, refreshToken]);
 
     return (
-        <AuthContext.Provider value={{ isAuthenticated, token, register, login, logout }}>
+        <AuthContext.Provider value={{ isAuthenticated, token, register, login, googleLogin, setAuthState, logout }}>
             {children}
         </AuthContext.Provider>
     );
