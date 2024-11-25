@@ -1,12 +1,12 @@
 export type Message = {
-    id: string;
-    sender: 'user' | 'agent';
+    role: string;
     content: string;
-    timestamp: Date;
-};
+    created_at: string;
+}
 
 export type Thread = {
     id: string;
     title: string;
-    messages: Message[];
-};
+    created_at: string;
+    updated_at: string;
+}
