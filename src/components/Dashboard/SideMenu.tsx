@@ -67,7 +67,7 @@ export default function SideMenu() {
                         CryptoMind
                     </Typography>
                 </Link>
-                <SelectContent />
+                {/*<SelectContent />*/}
             </Box>
             <Divider />
             <MenuContent />

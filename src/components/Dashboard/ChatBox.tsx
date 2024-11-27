@@ -3,32 +3,19 @@ import Card from '@mui/material/Card';
 import ChatInput from '../Dashboard/ChatInput';
 import Box from '@mui/material/Box';
 import IconButton from "@mui/material/IconButton";
-import {CardActionArea, CardHeader, CircularProgress} from "@mui/material";
+import {CardHeader} from "@mui/material";
 import Grid from "@mui/material/Grid2";
-import ChatMessage from './ChatMessage';
 import ChatIcon from '@mui/icons-material/Chat';
-import List from "@mui/material/List";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemText from "@mui/material/ListItemText";
-import { TypeAnimation } from "react-type-animation";
-import Stack from "@mui/material/Stack";
-import StatCard from "./StatCard";
-import ChartPortfolioAssets from "./ChartPorfolioAssets";
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
-import CardContent from "@mui/material/CardContent";
-// import {createThread, fetchThreadMessages, fetchThreads, sendMessageToThread} from "../../api/chat";
-import {useEffect, useRef} from "react";
+import {useEffect} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {
     fetchThreads,
     selectCurrentThread,
     selectThreads,
-    setCurrentThread,
     fetchThreadMessages,
-    selectCurrentMessages,
     sendMessageToThread,
-    createThread
+    createThread,
+    setCurrentThread
 } from "../../store/chatSlice";
 import {Thread} from "../../types";
 import ThreadsMenu from "./ThreadsMenu";
