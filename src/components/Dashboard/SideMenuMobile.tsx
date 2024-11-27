@@ -10,11 +10,10 @@ import NotificationsRoundedIcon from '@mui/icons-material/NotificationsRounded';
 
 import MenuButton from './MenuButton';
 import MenuContent from './MenuContent';
-import {useDispatch, useSelector} from "react-redux";
-import {fetchUserInfo, selectUser} from "../../store/userSlice";
-import {useEffect} from "react";
-import {useAuth} from "../../context/AuthContext";
-import {useNavigate} from "react-router-dom";
+import { useSelector} from "react-redux";
+import {selectUser} from "../../store/userSlice";
+import {useContext} from "react";
+import {AuthContext} from "../../context/AuthContext";
 
 interface SideMenuMobileProps {
   open: boolean | undefined;
@@ -22,16 +21,15 @@ interface SideMenuMobileProps {
 }
 
 export default function SideMenuMobile({ open, toggleDrawer }: SideMenuMobileProps) {
-  const dispatch = useDispatch();
   const user = useSelector(selectUser);
-  const {logout} = useAuth();
-  const navigate = useNavigate()
-  const handleLogout = () =>  { logout(navigate); console.log('lol'); }
+  const authContext = useContext(AuthContext);
 
-  useEffect(() => {
-    // @ts-ignore
-    dispatch(fetchUserInfo());
-  }, [dispatch]);
+  if (!authContext) {
+    throw new Error('AuthContext must be used within an AuthProvider');
+  }
+  const { logout } = authContext;
+
+  const handleLogout = () =>  { logout(); console.log('lol'); }
 
 
   return (
