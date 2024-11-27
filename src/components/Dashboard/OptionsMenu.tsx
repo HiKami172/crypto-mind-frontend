@@ -18,6 +18,8 @@ const MenuItem = styled(MuiMenuItem)({
 });
 
 export default function OptionsMenu() {
+    const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+    const open = Boolean(anchorEl);
     const authContext = useContext(AuthContext);
 
     if (!authContext) {
@@ -25,14 +27,9 @@ export default function OptionsMenu() {
     }
     const { logout } = authContext;
 
-    const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-    const open = Boolean(anchorEl);
-    const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-    };
-    const handleClose = () => {
-    setAnchorEl(null);
-    };
+
+    const handleClick = (event: React.MouseEvent<HTMLElement>) => { setAnchorEl(event.currentTarget); };
+    const handleClose = () => { setAnchorEl(null); };
 
     const handleLogout = () =>  { logout(); }
 

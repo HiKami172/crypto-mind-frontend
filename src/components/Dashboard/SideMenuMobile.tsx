@@ -10,9 +10,9 @@ import NotificationsRoundedIcon from '@mui/icons-material/NotificationsRounded';
 
 import MenuButton from './MenuButton';
 import MenuContent from './MenuContent';
-import {useDispatch, useSelector} from "react-redux";
-import {fetchUserInfo, selectUser} from "../../store/userSlice";
-import {useContext, useEffect} from "react";
+import { useSelector} from "react-redux";
+import {selectUser} from "../../store/userSlice";
+import {useContext} from "react";
 import {AuthContext} from "../../context/AuthContext";
 
 interface SideMenuMobileProps {
@@ -21,7 +21,6 @@ interface SideMenuMobileProps {
 }
 
 export default function SideMenuMobile({ open, toggleDrawer }: SideMenuMobileProps) {
-  const dispatch = useDispatch();
   const user = useSelector(selectUser);
   const authContext = useContext(AuthContext);
 
@@ -31,11 +30,6 @@ export default function SideMenuMobile({ open, toggleDrawer }: SideMenuMobilePro
   const { logout } = authContext;
 
   const handleLogout = () =>  { logout(); console.log('lol'); }
-
-  useEffect(() => {
-    // @ts-ignore
-    dispatch(fetchUserInfo());
-  }, [dispatch]);
 
 
   return (
