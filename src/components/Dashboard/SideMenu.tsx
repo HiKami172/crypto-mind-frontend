@@ -3,15 +3,15 @@ import { styled } from '@mui/material/styles';
 import Avatar from '@mui/material/Avatar';
 import MuiDrawer, { drawerClasses } from '@mui/material/Drawer';
 import Box from '@mui/material/Box';
+import Skeleton from '@mui/material/Skeleton';
 import Divider from '@mui/material/Divider';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import SelectContent from './SelectContent';
 import MenuContent from './MenuContent';
 import OptionsMenu from './OptionsMenu';
-import { useDispatch, useSelector } from "react-redux";
-import { fetchUserInfo, selectUser } from "../../store/userSlice";
-import { useEffect } from "react";
+import { useSelector } from "react-redux";
+import { selectUser } from "../../store/userSlice";
 import Link from "@mui/material/Link";
 
 const drawerWidth = 240;
@@ -29,13 +29,7 @@ const Drawer = styled(MuiDrawer)({
 });
 
 export default function SideMenu() {
-    const dispatch = useDispatch();
     const user = useSelector(selectUser);
-
-    useEffect(() => {
-        // @ts-ignore
-        dispatch(fetchUserInfo());
-    }, [dispatch]);
 
     return (
         <Drawer
@@ -73,7 +67,7 @@ export default function SideMenu() {
                         CryptoMind
                     </Typography>
                 </Link>
-                <SelectContent />
+                {/*<SelectContent />*/}
             </Box>
             <Divider />
             <MenuContent />
@@ -87,20 +81,32 @@ export default function SideMenu() {
                     borderColor: 'divider',
                 }}
             >
-                <Avatar
-                    sizes="small"
-                    alt={user?.name || 'User'}
-                    src='/static/images/avatar/default.jpg'
-                    sx={{ width: 36, height: 36 }}
-                />
-                <Box sx={{ mr: 'auto' }}>
-                    <Typography variant="body2" sx={{ fontWeight: 500, lineHeight: '16px' }}>
-                        {user?.name || 'Guest'}
-                    </Typography>
-                    <Typography variant="caption" sx={{ color: 'text.secondary' }}>
-                        {user?.email || 'guest@example.com'}
-                    </Typography>
-                </Box>
+                {user.status === 'loading' ? (
+                    <>
+                        <Skeleton variant="circular" width={36} height={36} />
+                        <Box sx={{ mr: 'auto' }}>
+                            <Skeleton variant="text" width={80} height={20} />
+                            <Skeleton variant="text" width={120} height={15} />
+                        </Box>
+                    </>
+                ) : (
+                    <>
+                        <Avatar
+                            sizes="small"
+                            alt={user?.name || 'User'}
+                            src='/static/images/avatar/default.jpg'
+                            sx={{ width: 36, height: 36 }}
+                        />
+                        <Box sx={{ mr: 'auto' }}>
+                            <Typography variant="body2" sx={{ fontWeight: 500, lineHeight: '16px' }}>
+                                {user?.name || 'Guest'}
+                            </Typography>
+                            <Typography variant="caption" sx={{ color: 'text.secondary' }}>
+                                {user?.email || 'guest@example.com'}
+                            </Typography>
+                        </Box>
+                    </>
+                )}
                 <OptionsMenu />
             </Stack>
         </Drawer>

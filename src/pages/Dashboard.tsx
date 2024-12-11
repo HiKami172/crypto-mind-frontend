@@ -18,6 +18,9 @@ import {
   datePickersCustomizations,
   treeViewCustomizations,
 } from '../theme/shared-theme/customizations';
+import {useEffect} from "react";
+import {fetchUserInfo} from "../store/userSlice";
+import {useDispatch} from "react-redux";
 
 const xThemeComponents = {
   ...chartsCustomizations,
@@ -27,6 +30,11 @@ const xThemeComponents = {
 };
 
 export default function Dashboard(props: { disableCustomTheme?: boolean }) {
+    const dispatch = useDispatch();
+    useEffect(() => {
+        // @ts-ignore
+        dispatch(fetchUserInfo());
+    }, [dispatch]);
   return (
     <AppTheme {...props} themeComponents={xThemeComponents}>
       <CssBaseline enableColorScheme />
