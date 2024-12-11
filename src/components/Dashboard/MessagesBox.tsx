@@ -2,7 +2,7 @@ import Box from "@mui/material/Box";
 import ChatMessage from "./ChatMessage";
 import Grid from "@mui/material/Grid2";
 import { TypeAnimation } from "react-type-animation";
-import {CircularProgress, Divider, LinearProgress, Typography} from "@mui/material";
+import {CircularProgress, Divider, LinearProgress} from "@mui/material";
 import * as React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../../store/store";
@@ -13,8 +13,6 @@ import { selectCurrentThread, fetchThreadMessages } from "../../store/chatSlice"
 const formatTimestamp = (timestamp: string) => {
     const date = new Date(timestamp);
     const today = new Date();
-    const diffInTime = today.getTime() - date.getTime();
-    const oneDay = 24 * 60 * 60 * 1000; // 1 day in milliseconds
 
     const isSameDay = today.toDateString() === date.toDateString();
     if (isSameDay) {

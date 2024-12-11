@@ -14,7 +14,6 @@ const formatTimestamp = (timestamp: string) => {
     const diffInTime = today.getTime() - date.getTime();
     const oneDay = 24 * 60 * 60 * 1000; // 1 day in milliseconds
     const oneMonth = 30 * oneDay; // approx. 30 days
-    const oneYear = 365 * oneDay; // approx. 365 days
 
     const isSameDay = today.toDateString() === date.toDateString();
     if (isSameDay) {

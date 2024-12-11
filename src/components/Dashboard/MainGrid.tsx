@@ -6,13 +6,12 @@ import Typography from '@mui/material/Typography';
 import Card from '@mui/material/Card';
 import { useEffect, useState } from 'react';
 import { fetchPortfolioData } from '../../api/binance';
-import StatCard, {AccountStats, StatCardProps} from './StatCard';
+import StatCard, {AccountStats} from './StatCard';
 import ChartPortfolioAssets from './ChartPortfolioAssets';
 import ChatBox from './ChatBox';
 import CustomizedDataGrid from './CustomizedDataGrid';
 import TradingViewWidget from './TradingViewWidget';
 import Copyright from '../../internals/components/Copyright';
-import Skeleton from '@mui/material/Skeleton';
 
 
 export default function MainGrid() {

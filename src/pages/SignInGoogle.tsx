@@ -31,7 +31,7 @@ export default function SignInGoogle(){
             console.error('No params provided:', params);
             navigate('/dashboard');
         }
-    }, [location, navigate]);
+    }, [location, navigate, setAuthState]);
 
     return <div>Signing in with Google...</div>;
 };
