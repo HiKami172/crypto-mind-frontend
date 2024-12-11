@@ -8,14 +8,7 @@ import CardContent from '@mui/material/CardContent';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import LinearProgress, { linearProgressClasses } from '@mui/material/LinearProgress';
-import Skeleton from '@mui/material/Skeleton';  // Import Skeleton
-
-import {
-  BitcoinIcon,
-  EthereumIcon,
-  TetherIcon,
-  GlobeFlag,
-} from '../../internals/components/CustomIcons';
+import Skeleton from '@mui/material/Skeleton';
 import { CardHeader } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { fetchAccountData } from "../../api/binance";
@@ -26,29 +19,6 @@ interface AssetData {
   price: number;
   logoURL: string | null;
 }
-
-const countries = [
-  {
-    name: 'Bitcoin',
-    flag: <BitcoinIcon />,
-    color: 'hsl(220, 25%, 65%)',
-  },
-  {
-    name: 'Ethereum',
-    flag: <EthereumIcon />,
-    color: 'hsl(220, 25%, 45%)',
-  },
-  {
-    name: 'Tether',
-    flag: <TetherIcon />,
-    color: 'hsl(220, 25%, 30%)',
-  },
-  {
-    name: 'Other',
-    flag: <GlobeFlag />,
-    color: 'hsl(220, 25%, 20%)',
-  },
-];
 
 interface StyledTextProps {
   variant: 'primary' | 'secondary';
@@ -126,7 +96,6 @@ const colors = [
 
 export default function ChartPortfolioAssets() {
   const [assets, setAssets] = useState<AssetData[]>([]);
-  // const [logos, setLogos] = useState<StringDictionary>({});
   const [totalValue, setTotalValue] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(true); // New loading state
 
@@ -145,7 +114,6 @@ export default function ChartPortfolioAssets() {
       const topAssets = sortedAssets.slice(0, 5);
       const othersValue = sortedAssets.slice(5).reduce((acc, asset) => acc + asset.value, 0);
       console.log(othersValue);
-      // fetchAssetLogo(topAssets.map((val, idx) => val.label)).then((res) => setLogos(res))
 
       if (othersValue > 0) {
         topAssets.push({
