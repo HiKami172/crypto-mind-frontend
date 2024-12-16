@@ -17,7 +17,7 @@ const initialState: UserState = {
 };
 
 export const fetchUserInfo = createAsyncThunk('user/fetchUserInfo', async () => {
-    const response = await apiClient.get('users/me/');  // Update with actual endpoint base URL if necessary
+    const response = await apiClient.get('users/me');  // Update with actual endpoint base URL if necessary
     return response.data;
 });
 
