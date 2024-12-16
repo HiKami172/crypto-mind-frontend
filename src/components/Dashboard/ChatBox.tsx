@@ -3,11 +3,12 @@ import Card from '@mui/material/Card';
 import ChatInput from '../Dashboard/ChatInput';
 import Box from '@mui/material/Box';
 import IconButton from "@mui/material/IconButton";
-import {CardHeader} from "@mui/material";
+import { CardHeader, Drawer, useMediaQuery, useTheme } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import ChatIcon from '@mui/icons-material/Chat';
-import {useEffect} from "react";
-import {useDispatch, useSelector} from "react-redux";
+import MenuIcon from '@mui/icons-material/Menu';
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {
     fetchThreads,
     selectCurrentThread,
@@ -17,32 +18,39 @@ import {
     createThread,
     setCurrentThread
 } from "../../store/chatSlice";
-import {Thread} from "../../types";
+import { Thread } from "../../types";
 import ThreadsMenu from "./ThreadsMenu";
 import MessagesBox from "./MessagesBox";
-import {AppDispatch} from "../../store/store";
-
+import { AppDispatch } from "../../store/store";
 
 export default function ChatBox() {
     const dispatch = useDispatch<AppDispatch>();
-
     const threads = useSelector(selectThreads);
     const currentThread = useSelector(selectCurrentThread);
+
+    const theme = useTheme();
+    const isSmallScreen = useMediaQuery(theme.breakpoints.down('md'));
+
+    const [isThreadsMenuOpen, setThreadsMenuOpen] = useState(false);
 
     useEffect(() => {
         dispatch(fetchThreads());
     }, [dispatch]);
-
 
     useEffect(() => {
         if (currentThread && currentThread.status === 'idle')
             dispatch(fetchThreadMessages({ threadId: currentThread.id, page: null }));
     }, [currentThread, dispatch]);
 
-    const handleNewThread = () => {dispatch(setCurrentThread(null))};
+    const handleNewThread = () => {
+        dispatch(setCurrentThread(null));
+    };
 
     const handleSelectThread = (thread: Thread) => {
         dispatch(setCurrentThread(thread.id));
+        if (isSmallScreen) {
+            setThreadsMenuOpen(false); // Close drawer on thread selection for small screens
+        }
     };
 
     const handleSendMessage = async (prompt: string) => {
@@ -56,11 +64,9 @@ export default function ChatBox() {
                 await dispatch(sendMessageToThread({ threadId: createdThread.id, message: prompt }));
             }
         } else {
-            // Directly send the message to the current thread
             await dispatch(sendMessageToThread({ threadId: currentThread.id, message: prompt }));
         }
     };
-
 
     return (
         <Card
@@ -75,22 +81,43 @@ export default function ChatBox() {
             <CardHeader
                 title={"Chat"}
                 action={
-                    <IconButton color="primary" size="small" onClick={handleNewThread}>
-                        <ChatIcon />
-                    </IconButton>
+                    <>
+                        {isSmallScreen && (
+                            <IconButton color="primary" size="small" onClick={() => setThreadsMenuOpen(true)}>
+                                <MenuIcon />
+                            </IconButton>
+                        )}
+                        <IconButton color="primary" size="small" onClick={handleNewThread}>
+                            <ChatIcon />
+                        </IconButton>
+                    </>
                 }
             />
             <Grid container spacing={2} sx={{ flexGrow: 1 }}>
-                <Grid size={{ xs: 9, md: 8 }} sx={{display: "flex", flexDirection: "column"}}>
+                <Grid size={{ xs: 12, md: 8 }} sx={{ display: "flex", flexDirection: "column" }}>
                     <MessagesBox />
-                    <Box sx={{ marginTop: 'auto', padding: 1}}>
+                    <Box sx={{ marginTop: 'auto', padding: 1 }}>
                         <ChatInput handleSendMessage={handleSendMessage} />
                     </Box>
                 </Grid>
 
-                <Grid size={{ xs: 3, md: 4 }} sx={{maxHeight: "80%"}}>
-                    <ThreadsMenu threads={threads} currentThread={currentThread} handleSelectThread={handleSelectThread} />
-                </Grid>
+                {!isSmallScreen && (
+                    <Grid size={{ xs: 0, md: 4 }} sx={{ maxHeight: "80%" }}>
+                        <ThreadsMenu threads={threads} currentThread={currentThread} handleSelectThread={handleSelectThread} />
+                    </Grid>
+                )}
+
+                {isSmallScreen && (
+                    <Drawer
+                        anchor="left"
+                        open={isThreadsMenuOpen}
+                        onClose={() => setThreadsMenuOpen(false)}
+                    >
+                        <Box sx={{ width: 250, padding: 2 }}>
+                            <ThreadsMenu threads={threads} currentThread={currentThread} handleSelectThread={handleSelectThread} />
+                        </Box>
+                    </Drawer>
+                )}
             </Grid>
         </Card>
     );
