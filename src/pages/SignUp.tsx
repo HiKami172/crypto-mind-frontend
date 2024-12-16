@@ -3,66 +3,88 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Stack from '@mui/material/Stack';
 import AppTheme from '../theme/shared-theme/AppTheme';
 import ColorModeSelect from '../theme/shared-theme/ColorModeSelect';
-import Content from "../components/Auth/Content";
+import {AppHeader, Content} from "../components/Auth/Content";
 import SignUpCard from "../components/Auth/SignUpCard";
 
 
 export default function SignUp(props: { disableCustomTheme?: boolean }) {
-  return (
-      <AppTheme {...props}>
-        <CssBaseline enableColorScheme />
-        <ColorModeSelect sx={{ position: 'fixed', top: '1rem', right: '1rem' }} />
-        <Stack
-            direction="column"
-            component="main"
-            sx={[
-              {
-                justifyContent: 'center',
-                height: 'calc((1 - var(--template-frame-height, 0)) * 100%)',
-                marginTop: 'max(40px - var(--template-frame-height, 0px), 0px)',
-                minHeight: '100%',
-              },
-              (theme) => ({
-                '&::before': {
-                  content: '""',
-                  display: 'block',
-                  position: 'absolute',
-                  zIndex: -1,
-                  inset: 0,
-                  backgroundImage:
-                      'radial-gradient(ellipse at 50% 50%, hsl(210, 100%, 97%), hsl(0, 0%, 100%))',
-                  backgroundRepeat: 'no-repeat',
-                  ...theme.applyStyles('dark', {
-                    backgroundImage:
-                        'radial-gradient(at 50% 50%, hsla(210, 100%, 16%, 0.5), hsl(220, 30%, 5%))',
-                  }),
-                },
-              }),
-            ]}
-        >
-          <Stack
-              direction={{ xs: 'column-reverse', md: 'row' }}
-              sx={{
-                justifyContent: 'center',
-                gap: { xs: 6, sm: 12 },
-                p: 2,
-                mx: 'auto',
-              }}
-          >
+    const [isTextAnimationComplete, setIsTextAnimationComplete] = React.useState(false);
+
+
+    return (
+        <AppTheme {...props}>
+            <CssBaseline enableColorScheme />
+            <ColorModeSelect sx={{ position: 'fixed', top: '1rem', right: '1rem' }} />
             <Stack
-                direction={{ xs: 'column-reverse', md: 'row' }}
-                sx={{
-                  justifyContent: 'center',
-                  gap: { xs: 6, sm: 12 },
-                  p: { xs: 2, sm: 4 },
-                  m: 'auto',
-                }}
+                direction="column"
+                component="main"
+                sx={[
+                    {
+                        justifyContent: 'center',
+                        marginTop: 0, // Remove additional offsets
+                        minHeight: '100vh', // Start with viewport height and grow
+                        position: 'relative', // Ensure the pseudo-element stays tied to this container
+                    },
+                    (theme) => ({
+                        '&::before': {
+                            content: '""',
+                            display: 'block',
+                            position: 'fixed', // Fixed to the viewport to persist on scroll
+                            zIndex: -1,
+                            top: 0,
+                            left: 0,
+                            width: '100%',
+                            height: '100%', // Ensure it covers the viewport height
+                            backgroundImage:
+                                'radial-gradient(ellipse at 50% 50%, hsl(210, 100%, 97%), hsl(0, 0%, 100%))',
+                            backgroundRepeat: 'no-repeat',
+                            backgroundSize: 'cover',
+                            ...theme.applyStyles('dark', {
+                                backgroundImage:
+                                    'radial-gradient(at 50% 50%, hsla(210, 100%, 16%, 0.5), hsl(220, 30%, 5%))',
+                            }),
+                        },
+                    }),
+                ]}
             >
-              <Content />
-              <SignUpCard />
+                <Stack
+                    direction={{ xs: 'column', md: 'row' }}
+                    sx={{
+                        justifyContent: 'center',
+                        gap: { xs: 6, sm: 12 },
+                        p: 2,
+                        mx: 'auto',
+                    }}
+                >
+                    <Stack
+                        direction={{ xs: 'column', md: 'row' }}
+                        sx={{
+                            justifyContent: 'center',
+                            gap: { xs: 6, sm: 12 },
+                            p: { xs: 2, sm: 4 },
+                            m: 'auto',
+                        }}
+                    >
+                        <Stack
+                            sx={{
+                                flexDirection: 'column',
+                                alignSelf: 'top',
+                                gap: 4,
+                                width: {
+                                    xs: '100%',
+                                    sm: '80%',
+                                    md: 450,
+                                },
+                                maxWidth: 450,
+                            }}
+                        >
+                            <AppHeader setIsTextAnimationComplete={setIsTextAnimationComplete} />
+                            <Content isTextAnimationComplete={isTextAnimationComplete} />
+                        </Stack>
+                        <SignUpCard />
+                    </Stack>
+                </Stack>
             </Stack>
-          </Stack>
-        </Stack>
-      </AppTheme>
-  );
+        </AppTheme>
+    );
 }

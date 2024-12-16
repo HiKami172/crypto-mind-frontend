@@ -4,7 +4,7 @@ import Box from "@mui/material/Box";
 
 export function SitemarkIcon() {
     return (
-        <Box sx={{ height: 100, width: 100, mr: 2 }}>
+        <Box sx={{ height: 64, width: 64, mr: 2 }}>
             <img
                 src="/logo512.png"  // Path relative to the public folder
                 alt="Sitemark Logo"

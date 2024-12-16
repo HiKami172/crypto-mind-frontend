@@ -37,9 +37,8 @@ const items = [
     },
 ];
 
-export default function Content() {
+export function Content({ isTextAnimationComplete }: { isTextAnimationComplete: boolean }) {
     const [visibleIndexes, setVisibleIndexes] = React.useState<number[]>([]);
-    const [isTextAnimationComplete, setIsTextAnimationComplete] = React.useState(false);
 
     React.useEffect(() => {
         if (isTextAnimationComplete) {
@@ -53,37 +52,8 @@ export default function Content() {
     }, [isTextAnimationComplete]);
 
     return (
-        <Stack
-            sx={{
-                flexDirection: 'column',
-                alignSelf: 'top',
-                gap: 4,
-                width: 450,
-                maxWidth: 450,
-            }}
-        >
-            <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                <SitemarkIcon />
-                <TypeAnimation
-                    sequence={[
-                        'CryptoMind',
-                        () => setIsTextAnimationComplete(true),
-                    ]}
-                    wrapper="span"
-                    speed={1}
-                    style={{
-                        fontSize: 'clamp(2rem, 10vw, 2.15rem)',
-                        fontFamily: `'Courier New', monospace`,
-                        fontWeight: 700,
-                        letterSpacing: '2px',
-                        color: 'white',
-                        display: 'inline-block',
-                        whiteSpace: 'nowrap',
-                        overflow: 'hidden',
-                    }}
-                />
-            </Box>
-            {items.map((item, index: number) => (
+        <React.Fragment>
+            {items.map((item, index) => (
                 <Slide
                     key={index}
                     direction="right"
@@ -105,6 +75,32 @@ export default function Content() {
                     </Stack>
                 </Slide>
             ))}
-        </Stack>
+        </React.Fragment>
+    );
+}
+
+export function AppHeader({ setIsTextAnimationComplete }: { setIsTextAnimationComplete: React.Dispatch<React.SetStateAction<boolean>> }) {
+    return (
+        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <SitemarkIcon />
+            <TypeAnimation
+                sequence={[
+                    'CryptoMind',
+                    () => setIsTextAnimationComplete(true),
+                ]}
+                wrapper="span"
+                speed={1}
+                style={{
+                    fontSize: 'clamp(1rem, 10vw, 2.15rem)',
+                    fontFamily: `'Courier New', monospace`,
+                    fontWeight: 700,
+                    letterSpacing: '2px',
+                    color: 'white',
+                    display: 'inline-block',
+                    whiteSpace: 'nowrap',
+                    overflow: 'hidden',
+                }}
+            />
+        </Box>
     );
 }

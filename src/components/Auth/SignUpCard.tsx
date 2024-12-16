@@ -21,7 +21,7 @@ export default function SignUpCard(props: { disableCustomTheme?: boolean }) {
     if (!authContext) {
         throw new Error('AuthContext must be used within an AuthProvider');
     }
-    const { register } = authContext;
+    const { register, googleLogin } = authContext;
 
 
     const [emailError, setEmailError] = React.useState(false);
@@ -170,7 +170,7 @@ export default function SignUpCard(props: { disableCustomTheme?: boolean }) {
                 <Button
                     fullWidth
                     variant="outlined"
-                    onClick={() => alert('Sign up with Google')}
+                    onClick={() => googleLogin()}
                     startIcon={<GoogleIcon />}
                 >
                     Sign up with Google
