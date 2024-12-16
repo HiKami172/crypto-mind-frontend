@@ -5,6 +5,10 @@ import AppRoutes from './routes/AppRoutes';
 import AppProviders from './providers/AppProviders';
 
 const App: React.FC = () => {
+    React.useEffect(() => {
+        document.title = "CryptoMind | Trade with ease";
+    }, []);
+
     return (
         <Router>
             <AppProviders>
