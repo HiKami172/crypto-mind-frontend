@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { PieChart } from '@mui/x-charts/PieChart';
 import { useDrawingArea } from '@mui/x-charts/hooks';
-import { styled } from '@mui/material/styles';
+import {styled} from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
@@ -97,7 +97,7 @@ const colors = [
 export default function ChartPortfolioAssets() {
   const [assets, setAssets] = useState<AssetData[]>([]);
   const [totalValue, setTotalValue] = useState<number>(0);
-  const [loading, setLoading] = useState<boolean>(true); // New loading state
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     setLoading(true); // Start loading
@@ -148,7 +148,16 @@ export default function ChartPortfolioAssets() {
       >
         <CardHeader title={'Portfolio'} />
         <CardContent>
-            <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2}}>
+          <Box
+              sx={{
+                display: 'flex',
+                flexDirection: {
+                  xs: 'column', // Stack assets below the chart on extra-small screens
+                  md: 'row',    // Keep assets next to the chart on medium and larger screens
+                },
+                gap: 2,
+              }}
+          >
               <Box sx={{ display: 'flex', justifyContent: 'center' }}>
                 {loading ? (
                     <Skeleton variant="circular" width={260} height={260} />

@@ -16,12 +16,12 @@ import Copyright from '../../internals/components/Copyright';
 
 export default function MainGrid() {
     const [cardData, setCardData] = useState<AccountStats | null>(null);
-    const [loading, setLoading] = useState(true);  // State for loading
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         fetchPortfolioData().then((res) => {
             setCardData(res);
-            setLoading(false);  // Set loading to false once the data is fetched
+            setLoading(false);
         });
     }, []);
 
