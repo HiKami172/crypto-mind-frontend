@@ -45,14 +45,18 @@ export function Content({ isTextAnimationComplete }: { isTextAnimationComplete: 
             const timeouts = items.map((_, index) =>
                 setTimeout(() => {
                     setVisibleIndexes((prev) => [...prev, index]);
-                }, (index + 1) * 500) // Stagger animations
+                }, (index + 1) * 500)
             );
-            return () => timeouts.forEach(clearTimeout); // Cleanup timeouts
+            return () => timeouts.forEach(clearTimeout);
         }
     }, [isTextAnimationComplete]);
 
     return (
-        <React.Fragment>
+        <Stack
+            sx={{
+                display: { xs: 'none', sm: 'block' },
+            }}
+        >
             {items.map((item, index) => (
                 <Slide
                     key={index}
@@ -60,7 +64,7 @@ export function Content({ isTextAnimationComplete }: { isTextAnimationComplete: 
                     in={visibleIndexes.includes(index)}
                     mountOnEnter
                     unmountOnExit
-                    timeout={1000} // Adjust animation duration
+                    timeout={1000}
                 >
                     <Stack direction="row" sx={{ gap: 2 }}>
                         {item.icon}
@@ -75,7 +79,7 @@ export function Content({ isTextAnimationComplete }: { isTextAnimationComplete: 
                     </Stack>
                 </Slide>
             ))}
-        </React.Fragment>
+        </Stack>
     );
 }
 

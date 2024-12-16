@@ -20,20 +20,20 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
             sx={[
                 {
                     justifyContent: 'center',
-                    marginTop: 0, // Remove additional offsets
-                    minHeight: '100vh', // Start with viewport height and grow
-                    position: 'relative', // Ensure the pseudo-element stays tied to this container
+                    marginTop: 0,
+                    minHeight: '100vh',
+                    position: 'relative',
                 },
                 (theme) => ({
                     '&::before': {
                         content: '""',
                         display: 'block',
-                        position: 'fixed', // Fixed to the viewport to persist on scroll
+                        position: 'fixed',
                         zIndex: -1,
                         top: 0,
                         left: 0,
                         width: '100%',
-                        height: '100%', // Ensure it covers the viewport height
+                        height: '100%',
                         backgroundImage:
                             'radial-gradient(ellipse at 50% 50%, hsl(210, 100%, 97%), hsl(0, 0%, 100%))',
                         backgroundRepeat: 'no-repeat',
@@ -46,24 +46,26 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
                 }),
             ]}
         >
-        <Stack
-          direction={{ xs: 'column', md: 'row' }}
-          sx={{
-            justifyContent: 'center',
-            gap: { xs: 6, sm: 12 },
-            p: 2,
-            mx: 'auto',
-          }}
-        >
-          <Stack
-            direction={{ xs: 'column', md: 'row' }}
-            sx={{
-              justifyContent: 'center',
-              gap: { xs: 6, sm: 12 },
-              p: { xs: 2, sm: 4 },
-              m: 'auto',
-            }}
-          >
+            <Stack
+                direction={{ xs: 'column', md: 'row' }}
+                sx={{
+                    justifyContent: 'center',
+                    gap: { xs: 6, sm: 12 },
+                    p: 2,
+                    mx: 'auto',
+                    width: '100%',
+                }}
+            >
+                <Stack
+                    direction={{ xs: 'column', md: 'row' }}
+                    sx={{
+                        justifyContent: 'center',
+                        gap: { xs: 6, sm: 12 },
+                        p: { xs: 2, sm: 4 },
+                        m: 'auto',
+                        width: { xs: '100%', sm: 'auto' },
+                    }}
+                >
               <Stack
                   sx={{
                       flexDirection: 'column',
@@ -78,7 +80,7 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
                   }}
               >
                 <AppHeader setIsTextAnimationComplete={setIsTextAnimationComplete} />
-                <Content isTextAnimationComplete={isTextAnimationComplete} />
+                <Content isTextAnimationComplete={isTextAnimationComplete}/>
             </Stack>
             <SignInCard />
           </Stack>
