@@ -29,7 +29,7 @@ export default function SideMenuMobile({ open, toggleDrawer }: SideMenuMobilePro
   }
   const { logout } = authContext;
 
-  const handleLogout = () =>  { logout(); console.log('lol'); }
+  const handleLogout = () =>  { logout(); }
 
 
   return (
@@ -47,7 +47,8 @@ export default function SideMenuMobile({ open, toggleDrawer }: SideMenuMobilePro
     >
       <Stack
         sx={{
-          maxWidth: '70dvw',
+          width: '70vw',
+          maxWidth: '70vw',
           height: '100%',
         }}
       >
