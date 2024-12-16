@@ -18,24 +18,4 @@ API.interceptors.request.use(
     (error) => Promise.reject(error)
 );
 
-API.interceptors.response.use(
-    (response) => response,
-    async (error) => {
-        const originalRequest = error.config;
-        if (error.response?.status === 401 && !originalRequest._retry) {
-            originalRequest._retry = true;
-            try {
-                const { data } = await API.post(`/refresh/`, {}, { withCredentials: true });
-                const newToken = data.access_token;
-                localStorage.setItem('token', newToken);
-                originalRequest.headers.Authorization = `Bearer ${newToken}`;
-                return API(originalRequest); // Retry the original request
-            } catch (refreshError) {
-                console.error('Token refresh failed:', refreshError);
-            }
-        }
-        return Promise.reject(error);
-    }
-);
-
 export default API;

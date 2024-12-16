@@ -41,14 +41,14 @@ const initialState: ChatState = {
 export const fetchThreads = createAsyncThunk(
     'chat/fetchThreads',
     async () => {
-    const response = await apiClient.get('/threads/');
+    const response = await apiClient.get('/threads');
     return response.data;
 });
 
 export const createThread = createAsyncThunk(
     'chat/createThread',
     async ({ threadTitle }: { threadTitle: string }) => {
-        const response = await apiClient.post('/threads/', {title: threadTitle});
+        const response = await apiClient.post('/threads', {title: threadTitle});
         return response.data;
     }
 );
@@ -56,7 +56,7 @@ export const createThread = createAsyncThunk(
 export const sendMessageToThread = createAsyncThunk(
     'chat/sendMessageToThread',
     async ({ threadId, message }: { threadId: string; message: string }) => {
-        const response = await apiClient.post(`/threads/${threadId}/messages/`, {
+        const response = await apiClient.post(`/threads/${threadId}/messages`, {
             message,
         });
         return {threadId: threadId, message: response.data};
@@ -68,7 +68,7 @@ export const fetchThreadMessages = createAsyncThunk(
     async ({ threadId, page }: { threadId: string, page: number | null }) => {
         if (!page)
             page = 1;
-        const response = await apiClient.get(`/threads/${threadId}/messages/`, {
+        const response = await apiClient.get(`/threads/${threadId}/messages`, {
             params: { page }
         });
         return response.data;

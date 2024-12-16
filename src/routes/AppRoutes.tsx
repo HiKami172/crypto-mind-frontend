@@ -12,7 +12,6 @@ const AppRoutes: React.FC = () => {
             <Route path="/sign-in" element={<SignIn />} />
             <Route path="/sign-up" element={<SignUp />} />
             <Route path="/associate/google/callback" element={<SignInGoogle />} />
-            {/*<Route path="/auth/google/callback" element={<GoogleCallback />} />*/}
             <Route
                 path="/dashboard"
                 element={

@@ -1,12 +1,12 @@
 import apiClient from './axiosInstance';
 
 export const fetchThreads = async (page = 1, perPage = 10) => {
-    const response = await apiClient.get('/threads/');
+    const response = await apiClient.get('/threads');
     return response.data;
 };
 
 export const createThread = async (data: { title: string; first_message: string }) => {
-    const response = await apiClient.post('/threads/', data);
+    const response = await apiClient.post('/threads', data);
     return response.data;
 };
 
@@ -16,6 +16,6 @@ export const fetchThreadMessages = async (threadId: string) => {
 };
 
 export const sendMessageToThread = async (threadId: string, message: string) => {
-    const response = await apiClient.post(`/threads/${threadId}/messages/`, {message});
+    const response = await apiClient.post(`/threads/${threadId}/messages`, {message});
     return response.data;
 };
