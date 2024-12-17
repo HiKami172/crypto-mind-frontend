@@ -6,50 +6,61 @@ const TradingViewWidget: React.FC = () => {
     const container = useRef<HTMLDivElement | null>(null);
 
     useEffect(() => {
-        if (container.current) {
-            // Ensure the container is ready and empty before adding the widget
-            container.current.innerHTML = '';
+        if (!container.current) return;
 
-            // Add the TradingView widget script dynamically
-            const script = document.createElement('script');
-            script.src = "https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js";
-            script.type = "text/javascript";
-            script.async = true;
+        // Store the container reference in a local variable to use in cleanup
+        const currentContainer = container.current;
 
-            // Configure the theme and widget settings
-            const isDarkMode = theme.palette.mode === 'dark';
-            const widgetConfig = {
-                autosize: true,
-                symbol: "BINANCE:BTCUSDT",
-                interval: "1",
-                timezone: "Etc/UTC",
-                theme: isDarkMode ? 'dark' : 'light',
-                style: "1",
-                locale: "en",
-                backgroundColor: isDarkMode ? 'rgba(0, 0, 0, 1)' : 'rgba(255, 255, 255, 1)',
-                allow_symbol_change: false,
-                save_image: false,
-                calendar: false,
-                hide_volume: true,
-                support_host: "https://www.tradingview.com"
-            };
+        // Clear existing content in the container
+        currentContainer.innerHTML = '';
 
-            // Serialize the widget configuration and add it to the script
-            script.innerHTML = JSON.stringify(widgetConfig);
+        // Prepare the widget's container div
+        const widgetContainer = document.createElement('div');
+        widgetContainer.className = 'tradingview-widget-container__widget';
+        widgetContainer.style.height = '100%'; // Ensure the widget container takes full height
+        widgetContainer.style.width = '100%';  // Ensure the widget container takes full width
+        currentContainer.appendChild(widgetContainer);
 
-            // Wait for the DOM to be fully loaded before appending the script
-            const timer = setTimeout(() => {
-                if (container.current) {
-                    container.current.appendChild(script);
-                    clearTimeout(timer);  // Clear timeout once the script is appended
-                }
-            }, 0);  // Ensure script is appended after the DOM is fully ready
-        }
+        // Add the TradingView widget script dynamically
+        const script = document.createElement('script');
+        script.src = "https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js";
+        script.type = "text/javascript";
+        script.async = true;
+
+        // Configure the theme and widget settings
+        const isDarkMode = theme.palette.mode === 'dark';
+        const widgetConfig = {
+            autosize: true,
+            symbol: "BINANCE:BTCUSDT",
+            interval: "1",
+            timezone: "Etc/UTC",
+            theme: isDarkMode ? 'dark' : 'light',
+            style: "1",
+            locale: "en",
+            backgroundColor: isDarkMode ? 'rgba(0, 0, 0, 1)' : 'rgba(255, 255, 255, 1)',
+            allow_symbol_change: false,
+            save_image: false,
+            calendar: false,
+            hide_volume: true,
+            support_host: "https://www.tradingview.com"
+        };
+
+        // Attach the widget configuration as the script's innerHTML
+        script.innerHTML = JSON.stringify(widgetConfig);
+        widgetContainer.appendChild(script);
+
+        // Cleanup function to remove script when the component unmounts
+        return () => {
+            // Ensure that we only clear the contents of the correct container
+            if (currentContainer) {
+                currentContainer.innerHTML = '';
+            }
+        };
     }, [theme.palette.mode]); // Re-run only when theme mode changes
 
     return (
         <div className="tradingview-widget-container" ref={container} style={{ height: '100%', width: '100%' }}>
-            <div className="tradingview-widget-container__widget" style={{ height: 'calc(100% - 32px)', width: '100%' }}></div>
+            {/* Copyright Footer */}
             <div className="tradingview-widget-copyright">
                 <a href="https://www.tradingview.com/" rel="noreferrer noopener nofollow" target="_blank">
                     <span className="blue-text">Track all markets on TradingView</span>

@@ -3,7 +3,6 @@ import Grid from '@mui/material/Grid2';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-import Card from '@mui/material/Card';
 import { useEffect, useState } from 'react';
 import { fetchPortfolioData } from '../../api/binance';
 import StatCard, {AccountStats} from './StatCard';
@@ -12,11 +11,13 @@ import ChatBox from './ChatBox';
 import CustomizedDataGrid from './CustomizedDataGrid';
 import TradingViewWidget from './TradingViewWidget';
 import Copyright from '../../internals/components/Copyright';
+import {useTheme} from "@mui/material";
 
 
 export default function MainGrid() {
     const [cardData, setCardData] = useState<AccountStats | null>(null);
     const [loading, setLoading] = useState(true);
+    const theme = useTheme();
 
     useEffect(() => {
         fetchPortfolioData().then((res) => {
@@ -26,7 +27,21 @@ export default function MainGrid() {
     }, []);
 
     return (
-        <Stack gap={3} sx={{ width: '100%', maxWidth: { sm: '100%', md: '1700px' } }}>
+        <Stack
+            gap={3}
+            sx={{
+                width: '100%',
+                maxWidth: { sm: '100%', md: '1700px' },
+                pt: 1.5,
+                padding: {
+                    xs: theme.spacing(0),
+                    sm: theme.spacing(1.5),
+                    md: theme.spacing(2),
+                },
+                borderRadius: 1,
+            }}
+        >
+
             <Typography component="h4" variant="h6">
                 Overview
             </Typography>
@@ -48,12 +63,12 @@ export default function MainGrid() {
                 <TradingViewWidget />
             </Box>
 
-            <Card variant="outlined">
-                <Typography component="h2" variant="h6" sx={{ mb: 2 }}>
+            {/*<Card variant="outlined">*/}
+                <Typography component="h2" variant="h6">
                     Orders
                 </Typography>
                 <CustomizedDataGrid />
-            </Card>
+            {/*</Card>*/}
 
             <Copyright sx={{ my: 4 }} />
         </Stack>
