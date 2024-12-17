@@ -5,6 +5,9 @@ import SignIn from '../pages/SignIn';
 import SignUp from '../pages/SignUp';
 import ProtectedRoute from './PrivateRoute';
 import SignInGoogle from "../pages/SignInGoogle";
+import Analytics from "../pages/Analytics";
+import Settings from "../pages/Settings";
+import About from "../pages/About";
 
 const AppRoutes: React.FC = () => {
     return (
@@ -12,6 +15,14 @@ const AppRoutes: React.FC = () => {
             <Route path="/sign-in" element={<SignIn />} />
             <Route path="/sign-up" element={<SignUp />} />
             <Route path="/associate/google/callback" element={<SignInGoogle />} />
+            <Route
+                path="/"
+                element={
+                    <ProtectedRoute>
+                        <Dashboard />
+                    </ProtectedRoute>
+                }
+            />
             <Route
                 path="/dashboard"
                 element={
@@ -21,10 +32,26 @@ const AppRoutes: React.FC = () => {
                 }
             />
             <Route
-                path="/"
+                path="/analytics"
                 element={
                     <ProtectedRoute>
-                        <Dashboard />
+                        <Analytics />
+                    </ProtectedRoute>
+                }
+            />
+            <Route
+                path="/settings"
+                element={
+                    <ProtectedRoute>
+                        <Settings />
+                    </ProtectedRoute>
+                }
+            />
+            <Route
+                path="/about"
+                element={
+                    <ProtectedRoute>
+                        <About />
                     </ProtectedRoute>
                 }
             />
