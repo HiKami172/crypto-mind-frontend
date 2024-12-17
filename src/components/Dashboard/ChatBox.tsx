@@ -54,8 +54,6 @@ export default function ChatBox() {
     };
 
     const handleSendMessage = async (prompt: string) => {
-        console.log("Current thread: ", currentThread?.id);
-        console.log("Message: ", prompt);
         if (!currentThread) {
             const createdThreadAction = await dispatch(createThread({ threadTitle: prompt }));
 

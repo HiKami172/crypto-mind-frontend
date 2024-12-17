@@ -123,7 +123,6 @@ export default function MessagesBox() {
                         speed={50}
                         style={{
                             display: "block",
-                            border: "solid 1px rgb(0,0,0)",
                             fontSize: "clamp(1rem, 5vw, 1.15rem)",
                             fontFamily: `'Courier New', monospace`,
                             fontWeight: 700,

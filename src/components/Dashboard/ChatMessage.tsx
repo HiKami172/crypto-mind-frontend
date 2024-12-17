@@ -1,4 +1,4 @@
-import { Box, Typography } from '@mui/material';
+import {Box, Typography, useTheme} from '@mui/material';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
@@ -13,8 +13,8 @@ interface ChatMessageProps {
 
 const ChatMessage = forwardRef<HTMLDivElement, ChatMessageProps>((props, ref) => {
     const isUser = props.role === 'user';
+    const theme = useTheme();
 
-    // Custom Code Block Renderer
     const renderers = {
         code({ inline, className, children, ...props }: any) {
             const match = /language-(\w+)/.exec(className || '');
@@ -55,25 +55,32 @@ const ChatMessage = forwardRef<HTMLDivElement, ChatMessageProps>((props, ref) =>
         >
             <Box
                 sx={{
-                    maxWidth: '80%',
+                    maxWidth: '90%',
                     padding: 1,
                     borderRadius: 2,
-                    display: "block",
-                    backgroundColor: isUser ? '#383a3b' : '#100f0f',
+                    display: 'block',
+                    backgroundColor: isUser
+                        ? theme.palette.primary.main
+                        : theme.palette.primary["100"],
+                    color: isUser ? theme.palette.primary.contrastText : 'text',
                     boxShadow: 1,
                     wordWrap: 'break-word',
                     overflowWrap: 'break-word',
                 }}
             >
-                {/* Render Markdown content */}
                 <ReactMarkdown
                     remarkPlugins={[remarkGfm]}
-                    components={renderers} // Pass custom renderers
+                    components={renderers}
                 >
                     {props.content}
                 </ReactMarkdown>
 
-                <Typography variant="caption" color="textSecondary" sx={{ marginTop: 0.5 }}>
+                <Typography
+                    variant="caption"
+                    sx={{
+                        color: isUser ? theme.palette.primary.contrastText : 'textSecondary',
+                        marginTop: 0.5
+                }}>
                     {new Date(props.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false })}
                 </Typography>
             </Box>

@@ -26,11 +26,10 @@ export default function MainGrid() {
     }, []);
 
     return (
-        <Stack gap={5} sx={{ width: '100%', maxWidth: { sm: '100%', md: '1700px' } }}>
-            <Card variant="outlined">
-                <Typography component="h2" variant="h6" sx={{ mb: 2 }}>
-                    Overview
-                </Typography>
+        <Stack gap={3} sx={{ width: '100%', maxWidth: { sm: '100%', md: '1700px' } }}>
+            <Typography component="h4" variant="h6">
+                Overview
+            </Typography>
                 <Grid container spacing={2}>
                     <Grid size={{ xs: 12, md: 3, lg: 5 }}>
                         <Stack gap={2} direction="column">
@@ -44,7 +43,6 @@ export default function MainGrid() {
                         </Box>
                     </Grid>
                 </Grid>
-            </Card>
 
             <Box sx={{ height: '60vh', width: '100%', margin: '20px, 20px' }}>
                 <TradingViewWidget />

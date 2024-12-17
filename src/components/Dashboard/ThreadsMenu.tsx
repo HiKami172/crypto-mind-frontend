@@ -1,6 +1,6 @@
 import {Thread} from "../../types";
 import React from 'react';
-import {Box, Divider, List, ListItemButton, ListItemText} from '@mui/material';
+import {Box, Divider, List, ListItemButton, ListItemText, useTheme} from '@mui/material';
 
 interface ThreadsMenuProps {
     threads: Thread[];
@@ -12,8 +12,8 @@ const formatTimestamp = (timestamp: string) => {
     const date = new Date(timestamp);
     const today = new Date();
     const diffInTime = today.getTime() - date.getTime();
-    const oneDay = 24 * 60 * 60 * 1000; // 1 day in milliseconds
-    const oneMonth = 30 * oneDay; // approx. 30 days
+    const oneDay = 24 * 60 * 60 * 1000;
+    const oneMonth = 30 * oneDay;
 
     const isSameDay = today.toDateString() === date.toDateString();
     if (isSameDay) {
@@ -56,6 +56,7 @@ const groupThreadsByDate = (threads: any[]) => {
 
 export default function ThreadsMenu({ threads, currentThread, handleSelectThread }: ThreadsMenuProps) {
     const groupedThreads = groupThreadsByDate(threads);
+    const theme = useTheme();
 
     return (
         <Box
@@ -88,7 +89,7 @@ export default function ThreadsMenu({ threads, currentThread, handleSelectThread
                                 sx={{
                                     borderRadius: '10px',
                                     backgroundColor: thread?.id === currentThread?.id
-                                        ? "#1d212d"
+                                        ? theme.palette.action.selected
                                         : "transparent",
                                 }}
                             >
