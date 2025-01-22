@@ -12,6 +12,7 @@ import OptionsMenu from './OptionsMenu';
 import { useSelector } from "react-redux";
 import { selectUser } from "../../store/userSlice";
 import Link from "@mui/material/Link";
+import {SitemarkIcon} from "../Auth/CustomIcons";
 
 const drawerWidth = 240;
 
@@ -29,7 +30,6 @@ const Drawer = styled(MuiDrawer)({
 
 export default function SideMenu() {
     const user = useSelector(selectUser);
-
     return (
         <Drawer
             variant="permanent"
@@ -51,20 +51,29 @@ export default function SideMenu() {
                 }}
             >
                 <Link
-                    href="/dashboard"
-                    variant="body2"
-                    sx={{ alignSelf: 'center', margin: "12px" }}
+                    underline="none"
+                    href="/"
+                    sx={{
+                        textDecoration: 'none', // Removes the underline completely
+                        color: 'text.primary',  // Ensures the color matches the text
+                    }}
                 >
-                    <Typography
-                        component="h2"
-                        variant="h4"
-                        style={{
-                            fontFamily: `'Courier New', monospace`,
-                            fontWeight: 700
-                        }}
+                    <Stack
+                        direction="row"
+                        alignItems="center"
                     >
-                        CryptoMind
-                    </Typography>
+                        <SitemarkIcon size={36} />
+                        <Typography
+                            component="h2"
+                            variant="h4"
+                            sx={{
+                                fontFamily: `'Courier New', monospace`,
+                                fontWeight: 700,
+                            }}
+                        >
+                            CryptoMind
+                        </Typography>
+                    </Stack>
                 </Link>
                 {/*<SelectContent />*/}
             </Box>
@@ -93,7 +102,7 @@ export default function SideMenu() {
                         <Avatar
                             sizes="small"
                             alt={user?.name || 'User'}
-                            src='/static/images/avatar/default.jpg'
+                            src={user?.avatar || '/static/images/avatar/default.jpg'}
                             sx={{ width: 36, height: 36 }}
                         />
                         <Box sx={{ mr: 'auto' }}>

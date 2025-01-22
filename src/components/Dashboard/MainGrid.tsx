@@ -12,6 +12,7 @@ import CustomizedDataGrid from './CustomizedDataGrid';
 import TradingViewWidget from './TradingViewWidget';
 import Copyright from '../../internals/components/Copyright';
 import {useTheme} from "@mui/material";
+import {columns, rows} from "../../internals/data/gridData";
 
 
 export default function MainGrid() {
@@ -67,7 +68,7 @@ export default function MainGrid() {
                 <Typography component="h2" variant="h6">
                     Orders
                 </Typography>
-                <CustomizedDataGrid />
+                <CustomizedDataGrid columns={columns} rows={rows}/>
             {/*</Card>*/}
 
             <Copyright sx={{ my: 4 }} />

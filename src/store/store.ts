@@ -1,11 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit';
 import userReducer from './userSlice';
 import chatReducer from './chatSlice';
+import binanceReducer from './binanceSlice';
 
 export const store = configureStore({
     reducer: {
         user: userReducer,
         chat: chatReducer,
+        binance: binanceReducer
     },
 });
 
