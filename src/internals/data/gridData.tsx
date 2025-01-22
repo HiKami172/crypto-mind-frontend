@@ -1,9 +1,8 @@
 import * as React from 'react';
-import Avatar from '@mui/material/Avatar';
 import Chip from '@mui/material/Chip';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import InfoIcon from '@mui/icons-material/Info';
-import { GridCellParams, GridRowsProp, GridColDef } from '@mui/x-data-grid';
+import { GridRowsProp, GridColDef } from '@mui/x-data-grid';
 import BuildCircleIcon from '@mui/icons-material/BuildCircle';
 import {Tooltip} from "@mui/material";
 import Box from "@mui/material/Box";
@@ -258,7 +257,7 @@ function renderIsActive(isActive: boolean) {
 }
 
 function renderRiskChip(risk: number) {
-  let color: "success" | "warning" | "error" | "default" = "default"; // Default value if risk is invalid
+  let color: "success" | "warning" | "error" | "default"; // Default value if risk is invalid
 
   if (risk <= 33) color = "success"; // Low risk
   else if (risk <= 66) color = "warning"; // Medium risk
