@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { DataGrid } from '@mui/x-data-grid';
-import { columns, rows } from '../../internals/data/gridData';
+// import { columns, rows } from '../../internals/data/gridData';
 
 // interface OrderProps {
 //   id: number
@@ -15,13 +15,24 @@ import { columns, rows } from '../../internals/data/gridData';
 //   triggerConditions: string
 //   tpSl: string
 // }
+interface CustomizedDataGridProps {
+  columns: any[];
+  rows: readonly any[];
+  selectable?: boolean; // Controls checkbox selection
+  showFooter?: boolean; // Controls footer visibility
+}
 
-export default function CustomizedDataGrid() {
+export default function CustomizedDataGrid({
+                                             columns,
+                                             rows,
+                                             selectable = false,
+                                             showFooter = true
+                                           }: CustomizedDataGridProps) {
   return (
       <React.Fragment>
         <DataGrid
           autoHeight
-          checkboxSelection
+          checkboxSelection={selectable}
           rows={rows}
           columns={columns}
           getRowClassName={(params) =>
@@ -59,6 +70,7 @@ export default function CustomizedDataGrid() {
               },
             },
           }}
+          hideFooter={!showFooter}
         />
       </React.Fragment>
   );

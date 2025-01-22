@@ -14,6 +14,7 @@ import { useSelector} from "react-redux";
 import {selectUser} from "../../store/userSlice";
 import {useContext} from "react";
 import {AuthContext} from "../../context/AuthContext";
+import NotificationsPopover from "./NotificationsPopover";
 
 interface SideMenuMobileProps {
   open: boolean | undefined;
@@ -23,6 +24,19 @@ interface SideMenuMobileProps {
 export default function SideMenuMobile({ open, toggleDrawer }: SideMenuMobileProps) {
   const user = useSelector(selectUser);
   const authContext = useContext(AuthContext);
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [notifications] = React.useState<string[]>([]);
+
+  const handleNotificationClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const notificationOpen = Boolean(anchorEl);
+
 
   if (!authContext) {
     throw new Error('AuthContext must be used within an AuthProvider');
@@ -59,17 +73,24 @@ export default function SideMenuMobile({ open, toggleDrawer }: SideMenuMobilePro
           >
             <Avatar
               sizes="small"
-              alt="Riley Carter"
-              src="/static/images/avatar/7.jpg"
+              alt={user?.name || "Guest"}
+              src={user?.avatar || "/static/images/avatar/7.jpg"}
               sx={{ width: 24, height: 24 }}
             />
             <Typography component="p" variant="h6">
               {user?.name || 'Guest'}
             </Typography>
           </Stack>
-          <MenuButton showBadge>
+          <MenuButton aria-label="Open notifications" onClick={handleNotificationClick}>
             <NotificationsRoundedIcon />
           </MenuButton>
+
+          <NotificationsPopover
+              anchorEl={anchorEl}
+              open={notificationOpen}
+              onClose={handleClose}
+              notifications={notifications}
+          />
         </Stack>
         <Divider />
         <Stack sx={{ flexGrow: 1 }}>

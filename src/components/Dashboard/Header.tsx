@@ -5,12 +5,25 @@ import NavbarBreadcrumbs from './NavbarBreadcrumbs';
 import MenuButton from './MenuButton';
 import ColorModeIconDropdown from '../../theme/shared-theme/ColorModeIconDropdown';
 import Search from './Search';
-import Button from "@mui/material/Button";
+import Button from '@mui/material/Button';
 import StarIcon from '@mui/icons-material/Star';
 import { useTheme } from '@mui/material/styles';
+import NotificationsPopover from './NotificationsPopover';  // Import the new component
 
 export default function Header() {
     const theme = useTheme();
+    const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+    const [notifications] = React.useState<string[]>([]);
+
+    const handleNotificationClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
+
+    const open = Boolean(anchorEl);
 
     return (
         <Stack
@@ -31,10 +44,17 @@ export default function Header() {
             <NavbarBreadcrumbs />
             <Stack direction="row" sx={{ gap: 1 }}>
                 <Search />
-                {/*showBadge if there are notifications*/}
-                <MenuButton aria-label="Open notifications">
+                <MenuButton aria-label="Open notifications" onClick={handleNotificationClick}>
                     <NotificationsRoundedIcon />
                 </MenuButton>
+
+                <NotificationsPopover
+                    anchorEl={anchorEl}
+                    open={open}
+                    onClose={handleClose}
+                    notifications={notifications}
+                />
+
                 <ColorModeIconDropdown />
                 <Button
                     sx={{ borderRadius: 10 }}

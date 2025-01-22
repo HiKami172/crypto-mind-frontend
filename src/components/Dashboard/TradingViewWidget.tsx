@@ -8,26 +8,21 @@ const TradingViewWidget: React.FC = () => {
     useEffect(() => {
         if (!container.current) return;
 
-        // Store the container reference in a local variable to use in cleanup
         const currentContainer = container.current;
 
-        // Clear existing content in the container
         currentContainer.innerHTML = '';
 
-        // Prepare the widget's container div
         const widgetContainer = document.createElement('div');
         widgetContainer.className = 'tradingview-widget-container__widget';
-        widgetContainer.style.height = '100%'; // Ensure the widget container takes full height
-        widgetContainer.style.width = '100%';  // Ensure the widget container takes full width
+        widgetContainer.style.height = '100%';
+        widgetContainer.style.width = '100%';
         currentContainer.appendChild(widgetContainer);
 
-        // Add the TradingView widget script dynamically
         const script = document.createElement('script');
         script.src = "https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js";
         script.type = "text/javascript";
         script.async = true;
 
-        // Configure the theme and widget settings
         const isDarkMode = theme.palette.mode === 'dark';
         const widgetConfig = {
             autosize: true,
@@ -45,18 +40,15 @@ const TradingViewWidget: React.FC = () => {
             support_host: "https://www.tradingview.com"
         };
 
-        // Attach the widget configuration as the script's innerHTML
         script.innerHTML = JSON.stringify(widgetConfig);
         widgetContainer.appendChild(script);
 
-        // Cleanup function to remove script when the component unmounts
         return () => {
-            // Ensure that we only clear the contents of the correct container
             if (currentContainer) {
                 currentContainer.innerHTML = '';
             }
         };
-    }, [theme.palette.mode]); // Re-run only when theme mode changes
+    }, [theme.palette.mode]);
 
     return (
         <div className="tradingview-widget-container" ref={container} style={{ height: '100%', width: '100%' }}>

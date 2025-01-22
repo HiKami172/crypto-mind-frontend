@@ -1,8 +1,8 @@
 import * as React from 'react';
-import type {} from '@mui/x-date-pickers/themeAugmentation';
-import type {} from '@mui/x-charts/themeAugmentation';
-import type {} from '@mui/x-data-grid/themeAugmentation';
-import type {} from '@mui/x-tree-view/themeAugmentation';
+// import type {} from '@mui/x-date-pickers/themeAugmentation';
+// import type {} from '@mui/x-charts/themeAugmentation';
+// import type {} from '@mui/x-data-grid/themeAugmentation';
+// import type {} from '@mui/x-tree-view/themeAugmentation';
 import { alpha } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
@@ -20,6 +20,7 @@ import {
 import {useEffect} from "react";
 import {fetchUserInfo} from "../store/userSlice";
 import {useDispatch} from "react-redux";
+import AccountSettings from "../components/Settings/AccountSettings";
 
 const xThemeComponents = {
     ...chartsCustomizations,
@@ -58,6 +59,7 @@ export default function Settings(props: { disableCustomTheme?: boolean }) {
                         }}
                     >
                         <Header />
+                        <AccountSettings />
                     </Stack>
                 </Box>
             </Box>

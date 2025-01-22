@@ -438,7 +438,10 @@ export const inputsCustomizations: Components<Theme> = {
     styleOverrides: {
       root: ({ theme }) => ({
         typography: theme.typography.caption,
-        marginBottom: 8,
+        marginBottom: 0, // Remove extra margin
+        '&.Mui-focused': {
+          color: theme.palette.primary.main, // Ensure consistent focus color
+        },
       }),
     },
   },
